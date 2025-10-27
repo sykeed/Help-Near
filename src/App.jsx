@@ -1,7 +1,11 @@
-import { useEffect } from "react";
+import { use, useEffect } from "react";
 import { supabase } from "./config/supabaseClient";
+import { useState } from "react";
+
 
 function App() {
+  const [users, setUsers] = useState(null);
+
   useEffect(() => {
     async function testDB() {
       // Try selecting all users from your 'users' table
@@ -10,6 +14,7 @@ function App() {
       if (error) {
         console.error("❌ Database connection error:", error);
       } else {
+        setUsers(data);
         console.log("✅ Connection successful!");
         console.log("Users table data:", data);
       }
@@ -21,7 +26,17 @@ function App() {
   return (
     <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
       <h1>Supabase Test</h1>
-      <p>Check your browser console for results (Ctrl + Shift + J)</p>
+       
+        <h2>Users Table Data:</h2>
+
+       {users && ( 
+
+        <div>
+         {users.map((user) => (
+          <p>{user.name} {user.email}</p>
+          ))}
+       </div>  
+            )}
     </div>
   );
 }
